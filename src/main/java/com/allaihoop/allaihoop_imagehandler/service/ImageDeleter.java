@@ -1,9 +1,10 @@
-package com.allaihoop.allaihoop_imagehandler;
+package com.allaihoop.allaihoop_imagehandler.service;
 
 import java.io.File;
 
 public class ImageDeleter implements Runnable{
 
+    public static final String DIRECTORY = "/home/mfrikken/WebstormProjects/allaihoop_web/backend/data/shortTimeStorage/";
     String file;
 
     public ImageDeleter(String filename) {
@@ -21,8 +22,7 @@ public class ImageDeleter implements Runnable{
     }
 
     private void deleteImage() {
-        String directory = "/home/mfrikken/WebstormProjects/allaihoop/backend/data/shortTimeStorage/";
-        File file = new File(directory + this.file);
+        File file = new File(DIRECTORY + this.file);
         if (file.delete()) System.out.println(this.file + " deleted.");
         else System.out.println("Deletion of " + this.file + " failed.");
     }
