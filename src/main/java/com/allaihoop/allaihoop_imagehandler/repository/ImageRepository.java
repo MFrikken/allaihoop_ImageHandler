@@ -1,0 +1,16 @@
+package com.allaihoop.allaihoop_imagehandler.repository;
+
+import java.io.File;
+
+import static org.apache.commons.lang3.Validate.notNull;
+
+
+public class ImageRepository {
+
+    private final String shortTimeStorage = "/home/mfrikken/WebstormProjects/allaihoop_web/backend/data/shortTimeStorage/";
+    public File fetchFileFromShortTimeStorage(String filename) {
+        File file = new File(shortTimeStorage + filename);
+        notNull(file);
+        return file;
+    }
+}

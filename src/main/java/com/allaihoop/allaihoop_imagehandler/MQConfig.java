@@ -17,13 +17,22 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class MQConfig {
 
-    public static final String QUEUE = "deleteImage_queue";
-    private static final String EXCHANGE = "deleteImage";
-    private static final String ROUTINGKEY = "deleteImage";
+    public static final String DELETE_IMAGE_QUEUE = "deleteImage_queue";
+    public static final String SAVE_IMAGE_QUEUE = "saveImage_queue";
+
+    private static final String DELETE_IMAGE_ROUTINGKEY = "deleteImage";
+    private static final String SAVE_IMAGE_ROUTINGKEY = "saveImage";
+
+    private static final String EXCHANGE = "imageExchange";
 
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE);
+    public Queue deleteQueue() {
+        return new Queue(DELETE_IMAGE_QUEUE);
+    }
+
+    @Bean
+    public Queue saveQueue() {
+        return new Queue(SAVE_IMAGE_QUEUE);
     }
 
     @Bean
@@ -32,11 +41,19 @@ public class MQConfig {
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange exchange) {
+    public Binding deleteBinding(Queue deleteQueue, TopicExchange exchange) {
         return BindingBuilder
-                .bind(queue)
+                .bind(deleteQueue)
                 .to(exchange)
-                .with(ROUTINGKEY);
+                .with(DELETE_IMAGE_ROUTINGKEY);
+    }
+
+    @Bean
+    public Binding saveBinding(Queue saveQueue, TopicExchange exchange) {
+        return BindingBuilder
+                .bind(saveQueue)
+                .to(exchange)
+                .with(SAVE_IMAGE_ROUTINGKEY);
     }
 
     @Bean
