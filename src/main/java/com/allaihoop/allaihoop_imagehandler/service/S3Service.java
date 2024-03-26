@@ -1,12 +1,23 @@
 package com.allaihoop.allaihoop_imagehandler.service;
 
-import com.allaihoop.allaihoop_imagehandler.model.image.Feedback;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.services.s3.S3Client;
 
+@Service
+public class S3Service {
 
-import java.io.IOException;
-import java.io.InputStream;
+    private final S3Client s3Client;
 
-public interface S3Service {
-    void uploadImage(String key, InputStream imagefile, ObjectMetadata metadata) throws IOException;
+    public S3Service(S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
+    public void putObject(String bucketName, String key, byte[] file) {
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.putObject(objectRequest, RequestBody.fromBytes(file));
+    }
 }

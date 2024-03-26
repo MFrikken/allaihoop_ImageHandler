@@ -6,7 +6,7 @@ import static com.allaihoop.allaihoop_imagehandler.model.image.Validator.isNumer
 import static org.apache.http.util.Asserts.notNull;
 
 // Domain primitive for date in ISO-format
-// YY-MM-DDTHHMMSSZ
+// YYYY-MM-DDTHH-MM-SSSSSZ
 public class Date {
     private final String year;
     private final String month;
@@ -17,80 +17,65 @@ public class Date {
 
     public Date(String file_date) throws DateFormatException {
         notNull(file_date, "Field name must not be empty.");
-        if (!(file_date.length() == 16))
+        if (!(file_date.length() == 23))
             throw new DateFormatException("Provided date does not fit ISO-Format length.");
 
-        String[] dateComponents = file_date.split("-");
-        // split string of time-component into each individual part
-        if (dateComponents.length == 3) {
-            String timeString = dateComponents[2].replaceAll("[TZ]", "");
-            String[] timeComponents = new String[4];
+        String file_date_mod = file_date.replace("Z", "");
+        String[] dateComponents = file_date_mod.split("[-T]");
 
-            int i = 0;
-            int j = 0;
-
-            while (i <= timeComponents.length - 1) {
-                while (j <= timeString.length() - 1) {
-                    timeComponents[i] += timeString.charAt(j);
-                    if (j % 2 == 0) i++;
-                    j++;
-                }
-            }
-        }
-
-        this.year = initYear(dateComponents);
-        this.month = initMonth(dateComponents);
-        this.day = initDay(dateComponents);
-        this.hour = initHour(dateComponents);
-        this.minute = initMinute(dateComponents);
-        this.second = initSecond(dateComponents);
+        this.year = initYear(dateComponents[0]);
+        this.month = initMonth(dateComponents[1]);
+        this.day = initDay(dateComponents[2]);
+        this.hour = initHour(dateComponents[3]);
+        this.minute = initMinute(dateComponents[4]);
+        this.second = initSecond(dateComponents[5]);
     }
 
-    private String initYear(String[] dateComponents) throws DateFormatException {
-        if (isNumerical(dateComponents[0]) >= 0 && isNumerical(dateComponents[0]) <= 99) {
-            return dateComponents[0];
+    static String initYear(String year) throws DateFormatException {
+        if (isNumerical(year) >= 2024 && isNumerical(year) <= 2024) {
+            return year;
         }
         throw new DateFormatException("Year does not match the required format.");
     }
 
-    private String initMonth(String[] dateComponents) throws DateFormatException {
-        if (isNumerical(dateComponents[1]) >= 1 && isNumerical(dateComponents[1]) <= 12) {
-            return dateComponents[1];
+    static String initMonth(String month) throws DateFormatException {
+        if ((isNumerical(month) >= 1 && isNumerical(month) <= 12) && month.length() == 2) {
+            return month;
         }
         throw new DateFormatException("Month does not match the required format.");
     }
 
-    private String initDay(String[] timeComponents) throws DateFormatException {
-        if (isNumerical(timeComponents[0]) >= 1 && isNumerical(timeComponents[0]) <= 31) {
-            return timeComponents[0];
+    static String initDay(String day) throws DateFormatException {
+        if ((isNumerical(day) >= 1 && isNumerical(day) <= 31) && day.length() == 2) {
+            return day;
         }
         throw new DateFormatException("Day does not match the required format.");
     }
 
-    private String initHour(String[] timeComponents) throws DateFormatException {
-        if (isNumerical(timeComponents[1]) >= 0 && isNumerical(timeComponents[1]) <= 24) {
-            return timeComponents[1];
+    static String initHour(String hour) throws DateFormatException {
+        if ((isNumerical(hour) >= 0 && isNumerical(hour) <= 24) && hour.length() == 2) {
+            return hour;
         }
         throw new DateFormatException("Hour does not match the required format.");
     }
 
-    private String initMinute(String[] timeComponents) throws DateFormatException {
-        if (isNumerical(timeComponents[2]) >= 0 && isNumerical(timeComponents[2]) <= 59) {
-            return timeComponents[2];
+    static String initMinute(String minute) throws DateFormatException {
+        if ((isNumerical(minute) >= 0 && isNumerical(minute) <= 59) && minute.length() == 2) {
+            return minute;
         }
         throw new DateFormatException("Minute does not match the required format.");
     }
 
-    private String initSecond(String[] timeComponents) throws DateFormatException {
-        if (isNumerical(timeComponents[3]) >= 0 && isNumerical(timeComponents[3]) <= 59) {
-            return timeComponents[3];
+    static String initSecond(String second) throws DateFormatException {
+        if ((isNumerical(second) >= 0 && isNumerical(second) <= 59000) && second.length() == 5) {
+            return second;
         }
-        throw new DateFormatException("Minute does not match the required format.");
+        throw new DateFormatException("Second does not match the required format.");
     }
 
     @Override
     public String toString() {
-        return this.year + "-" + this.month + "-" + this.day + "T" + this.hour + this.minute + this.second + "Z";
+        return this.year + "-" + this.month + "-" + this.day + "T" + this.hour + "-" + this.minute + "-" + this.second + "Z";
     }
 }
 

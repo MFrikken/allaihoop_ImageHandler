@@ -1,6 +1,5 @@
 package com.allaihoop.allaihoop_imagehandler.model.image;
 
-import com.allaihoop.allaihoop_imagehandler.exception.DateFormatException;
 import com.allaihoop.allaihoop_imagehandler.model.image.date.Date;
 
 import static org.apache.commons.lang3.Validate.notNull;
@@ -13,16 +12,25 @@ public class Name {
 
     public Name(String filename) throws Exception {
         notNull(filename);
-        String[] components = filename.split("[-.]", 2);
-
+        String[] components = splitFilename(filename);
 
         this.fieldname = new Fieldname(components[0]);
         this.date = new Date(components[1]);
-        this.extension = new Extension(components[1]);
+        this.extension = new Extension(components[2]);
+    }
+
+    private String[] splitFilename(String filenameString) {
+        String filename = filenameString.split("[-.]", 2)[0];
+        String dateAndExtension = filenameString.split("[-.]", 2)[1];
+
+        String date = dateAndExtension.split("\\.")[0];
+        String extension = dateAndExtension.split("\\.")[1];
+
+        return new String[]{filename, date, extension};
     }
 
     @Override
     public String toString() {
-        return this.fieldname + "-" + this.date + "." + this.extension;
+        return this.fieldname.getFieldname() + "-" + this.date + "." + this.extension.getExtension();
     }
 }

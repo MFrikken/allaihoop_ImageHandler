@@ -20,10 +20,12 @@ public class MessageListener {
     @RabbitListener(queues = MQConfig.DELETE_IMAGE_QUEUE)
     public void deleteImageListener(String message) {
         deleterService.DeleteImage(message);
+        System.out.println("Image (" + message + ") will be deleted from local short time storage in 5 minutes.");
     }
 
     @RabbitListener(queues = MQConfig.SAVE_IMAGE_QUEUE)
     public void saveImageListener(SaveImageMessage message) throws Exception {
         savingService.saveImage(message.getFilename(), message.getFeedback());
+        System.out.println("Loading image (" + message.getFilename() + ") into S3 cloud storage.");
     }
 }

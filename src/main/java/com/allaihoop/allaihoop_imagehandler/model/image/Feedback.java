@@ -15,8 +15,7 @@ public class Feedback {
     }
 
     public String toFileNameAppendix() {
-        if (feedback) return "01";
-        return "00";
+        return feedback ? "01" : "00";
     }
 
     public boolean getFeedback() {

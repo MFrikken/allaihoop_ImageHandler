@@ -17,10 +17,14 @@ public class Extension {
         jpeg
     }
 
-    private String initExtension(String extension) {
+    public static String initExtension(String extension) {
         if(EnumUtils.isValidEnum(extensions.class, extension)) {
             return extension;
         }
-        throw new WrongExtensionError("The given extension (" + extension + " is not supported.");
+        throw new WrongExtensionError("The given extension (" + extension + ") is not supported.");
+    }
+
+    public String getExtension() {
+        return this.extension;
     }
 }

@@ -5,11 +5,12 @@ import static org.apache.commons.lang3.Validate.notNull;
 public abstract class Validator {
     public static int isNumerical(String number) {
         notNull(number);
-        try{
+        try {
             return Integer.parseInt(number);
         } catch (NumberFormatException e) {
-            throw e;
+            throw new NumberFormatException(number + " is no numerical value.");
         }
+
     }
 
     public static boolean isValid(Boolean function, String message) throws Exception {
